@@ -2,49 +2,20 @@ import { Link } from "react-router-dom";
 import patrick from "../static/patrick_edited.png";
 import moss from "../static/moss_edited.png";
 import auth from "./auth";
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
+import navStyle from "./Nav.css";
 
 class Nav extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-    // this.updateNav = this.updateNav.bind(this);
-  }
-  //This should be in a css file
-  navStyle = {
-    colour: "white",
-  };
-
-  // updateNav() {
-  //   if (auth.isAuthenticated == true) {
-  //     this.setLoggedIn = true;
-  //   } else {
-  //     this.setLoggedIn = false;
-  //   }
+  // constructor(props) {
+  //   super(props);
   // }
+
   handleClick(e) {
     e.preventDefault();
-    console.log("Logout was clicked");
-    // Changes the state in auth.js
     auth.logout();
-    // this.setState({ loggedIn: false });
-
-    // Nav.setLoggedIn(false);
-    // Auth to update here
-    console.log("auth.isAuthenticated");
-    console.log(auth.isAuthenticated());
   }
 
-  // var loggedIn = setLoggedIn(auth.isAuthenticated());
-  // if is authenticated, return this
-  // console.log(props);
   render() {
-    const navStyle = {
-      colour: "white",
-    };
-    console.log("this.props in nav");
-    console.log(this.props);
     if (this.props.loggedIn) {
       return (
         <nav>

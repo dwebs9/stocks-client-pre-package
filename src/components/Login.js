@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import jwt from "jsonwebtoken";
-import {
-  Button,
-  FormGroup,
-  FormControl,
-  Form,
-  Label,
-  NavItem,
-} from "react-bootstrap";
+import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import auth from "./auth";
@@ -60,7 +53,7 @@ class Login extends Component {
     console.log("this._child.current.someMethod()");
     // console.log(this._child.current.someMethod());
     // process the fetch and store the result in response
-    const response = fetch("http://131.181.190.87:3000/user/login", {
+    fetch("http://131.181.190.87:3000/user/login", {
       method: "POST",
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

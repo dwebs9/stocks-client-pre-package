@@ -1,29 +1,6 @@
+/*
+ The css style for
+*/
 .App {
   text-align: center;
-}
-nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 10vh;
-  background: #e5d9ba;
-  color: white;
-}
-
-.nav-links {
-  width: 50%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  list-style: none;
-}
-
-img {
-  width: 100%;
-  height: auto;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.homepage-style {
 }

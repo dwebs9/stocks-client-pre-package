@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import React, { setState, useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 
 const columns = [
   { headerName: "Close", field: "close" },
@@ -16,8 +16,6 @@ const columns = [
   { headerName: "Volumes", field: "volumes" },
 ];
 
-const rowData = [];
-
 export default function Stock({ match }) {
   const [rowData, setRowData] = useState([]);
   let symbol = match.params.id;
@@ -25,6 +23,7 @@ export default function Stock({ match }) {
 
   useEffect(() => {
     /// / What should we call here to get the appropiate fetch url ??
+    // !!! WARING !!! React Hook useEffect has a missing dependency: 'symbol'
     fetch(`http://131.181.190.87:3000/stocks/${symbol}`).then((response) => {
       console.log("successful");
       let jsonResponse = response.json();

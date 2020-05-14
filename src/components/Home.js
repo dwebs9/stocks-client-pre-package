@@ -2,16 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import Text_field from "./textField";
-import React, { useState, useEffect, Component } from "react";
-import {
-  Button,
-  FormGroup,
-  FormControl,
-  Form,
-  Label,
-  NavItem,
-} from "react-bootstrap";
+import TextField from "./TextField";
+import React, { Component } from "react";
 
 class Home extends Component {
   constructor(props) {
@@ -28,7 +20,6 @@ class Home extends Component {
         },
       ],
       rowData: [],
-      // search: "",
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,7 +57,7 @@ class Home extends Component {
   }
 
   doesExternalFilterPass = (node) => {};
-  externalFilterChanged = (newValue) => {};
+  externalFilterChange = (newValue) => {};
 
   render() {
     return (
@@ -74,21 +65,19 @@ class Home extends Component {
         className="ag-theme-balham"
         style={{ height: "500px", width: "600px", align: "center" }}
       >
-        <Text_field onSearch={this.handleSubmit} />
+        <TextField onSearch={this.handleSubmit} />
         <AgGridReact
           enableSorting={true}
-          // isExternalFilterPresent={this.isExternalFilterPresent}
           animateRows={true}
           enableFilter={true}
           onGridReady={this.onGridReady}
           pagination={true}
-          ref="agGrid" // useful for accessing the component directly via ref
-          rowSelection="single" // simple attributes, not bound to any state or prop
+          ref="agGrid"
+          rowSelection="single"
           onRowClicked={(row) =>
             this.props.history.push(`/stock/${row.data.symbol}`)
           }
           columnDefs={this.state.columnDefs}
-          // This stays the same
           rowData={this.state.rowData}
         ></AgGridReact>
       </div>

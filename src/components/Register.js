@@ -1,7 +1,6 @@
-import React, { useState, Component } from "react";
-import { Button, FormGroup, FormControl, Form, Label } from "react-bootstrap";
+import React, { Component } from "react";
+import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import "./Register.css";
-import { Link } from "react-router-dom";
 import auth from "./auth";
 
 class Register extends Component {
@@ -31,16 +30,10 @@ class Register extends Component {
     console.log(this.state.email);
   }
 
-  // componentDidMount() {
-  //   console.log("componentDidMount()");
-  //   console.log(this.props);
-  // }
-
   handlePasswordChange(event) {
     this.setState({ password: event.target.value });
     console.log("handlePasswordChange(event)");
     console.log("password:");
-
     console.log(this.state.password);
   }
 
@@ -48,18 +41,16 @@ class Register extends Component {
     console.log("handleSubmit(event)");
     console.log("Login pressed: email");
     console.log(this.email);
-    // setState({ email: event.target.value });
     console.log("Login pressed: password");
     console.log(this.password);
-    // setState({ password: event.target.value });
 
-    // console.log(this._child.current.someMethod());
     // process the fetch and store the result in response
-    const response = fetch("http://131.181.190.87:3000/user/register", {
+
+    fetch("http://131.181.190.87:3000/user/register", {
       method: "POST",
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: this.state.email,

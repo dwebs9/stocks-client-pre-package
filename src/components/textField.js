@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 function Text_field(props) {
   const [innerIndustry, setInnerIndustry] = useState("");
