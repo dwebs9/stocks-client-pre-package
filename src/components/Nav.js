@@ -1,7 +1,6 @@
-import "./App.css";
 import { Link } from "react-router-dom";
-import patrick from "./static/patrick_edited.png";
-import moss from "./static/moss_edited.png";
+import patrick from "../static/patrick_edited.png";
+import moss from "../static/moss_edited.png";
 import auth from "./auth";
 import React, { useState, useEffect, Component } from "react";
 

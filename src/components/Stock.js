@@ -1,18 +1,8 @@
-import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
-import "./template-style.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { render } from "@testing-library/react";
 import React, { setState, useState, useEffect, Component } from "react";
-import { Link } from "react-router-dom";
-import Table from "react-bootstrap/Table";
-import { useParams } from "react-router-dom";
-
-// Turn this into a functional component
-// apply the logic from the  codepen
 
 const columns = [
   { headerName: "Close", field: "close" },

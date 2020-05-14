@@ -1,20 +1,18 @@
 import "./App.css";
-import Nav from "./Nav";
-import Home from "./Home";
-import Stock from "./Stock";
+import Nav from "./components/Nav";
+import Home from "./components/Home";
+import Stock from "./components/Stock";
 //Import a component into the file
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import React, { Component, useState } from "react";
-import "./App.css";
-
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 // import Login from "./Login";
 // Renames BrowserRouter as Router (to be called in the code as Router)
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import auth from "./auth";
+import auth from "./components/auth";
 
 function App() {
   var loggedIn = false;
