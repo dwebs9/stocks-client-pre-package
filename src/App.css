@@ -3,4 +3,7 @@
 */
 .App {
   text-align: center;
+  background-color: #99c6eb;
+  font-size: 0.85rem;
+  padding: 0.7em 1.25em;
 }

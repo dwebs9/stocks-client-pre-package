@@ -2,61 +2,40 @@ import { Link } from "react-router-dom";
 import patrick from "../static/patrick_edited.png";
 import moss from "../static/moss_edited.png";
 import auth from "./auth";
-import React, { Component } from "react";
+import React, { Component, useContext, AuthContext } from "react";
 import navStyle from "./Nav.css";
+import useLoginStatus from "./LoginStatus";
 
-class Nav extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+// How to style in react
+const imgStyle = {
+  margin: 50,
+  width: "25%",
+};
 
-  handleClick(e) {
-    e.preventDefault();
-    auth.logout();
-  }
-
-  render() {
-    if (this.props.loggedIn) {
-      return (
-        <nav>
-          <ul className="nav-links">
-            <img src={patrick} alt="Logo" />
-            <Link to="/" style={navStyle}>
-              <li>Home</li>
-            </Link>
-            <Link to="/stock/A" style={navStyle}>
-              <li>Stocks</li>
-            </Link>
-            <Link to="/" style={navStyle}>
-              <button onClick={this.handleClick}>Logout</button>
-            </Link>
-            <img src={moss} alt="Logo" />
-          </ul>
-        </nav>
-      );
-    } else {
-      return (
-        <nav>
-          <ul className="nav-links">
-            <img src={patrick} alt="Logo" />
-            <Link to="/" style={navStyle}>
-              <li>Home</li>
-            </Link>
-            <Link to="/stock/A" style={navStyle}>
-              <li>Stocks</li>
-            </Link>
-            <Link to="/login" style={navStyle}>
-              <li>Login</li>
-            </Link>
-            <Link to="/register" style={navStyle}>
-              <li>Register</li>
-            </Link>
-            <img src={moss} alt="Logo" />
-          </ul>
-        </nav>
-      );
-    }
-  }
+function Nav() {
+  const { loginStatus } = useContext(AuthContext);
+  const { isLoggedIn, loggedInRender, LoggedOutRender } = useLoginStatus();
+  return (
+    <nav class="navbar navbar-expand bg-base-blue text-white py-2">
+      <img src={patrick} alt="Logo" style={imgStyle} />
+      <ul className="nav-links">
+        <Link to="/" style={navStyle}>
+          <li>Home</li>
+        </Link>
+        <Link to="/stock/A">
+          <li>Stocks</li>
+        </Link>
+        {isLoggedIn ? loggedInRender() : LoggedOutRender()}
+        {/* <Link to="/login">
+          <li>Login</li>
+        </Link>
+        <Link to="/register">
+          <li>Register</li>
+        </Link> */}
+      </ul>
+      <img src={moss} alt="Logo" />
+    </nav>
+  );
 }
 
 export default Nav;

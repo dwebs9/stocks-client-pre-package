@@ -4,6 +4,8 @@ import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import auth from "./auth";
+import { data } from "./Cb.js";
+import { AuthContext } from "../App";
 
 class Login extends Component {
   constructor(props) {
@@ -11,6 +13,8 @@ class Login extends Component {
     this.state = {
       email: "enter@email.com",
       password: "password",
+      rememberMe: false,
+      token: "",
     };
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -19,13 +23,16 @@ class Login extends Component {
 
   validateForm() {
     console.log("validateForm()");
-    // return email.length > 0 && password.length > 0;
-    // console.log(this._child.current.someMethod());
   }
 
   componentDidMount() {
     console.log("componentDidMount()");
     console.log(this.props);
+    const rememberMe = localStorage.getItem("rememberMe") === "true";
+    const user = rememberMe ? localStorage.getItem("user") : "";
+    let authToken = localStorage.getItem("token");
+    this.setState({ user, rememberMe });
+    this.setState({ token: authToken });
   }
 
   handleEmailChange(event) {
@@ -43,16 +50,6 @@ class Login extends Component {
   }
 
   handleSubmit(event) {
-    console.log("handleSubmit(event)");
-    console.log("Login pressed: email");
-    console.log(this.email);
-    // setState({ email: event.target.value });
-    console.log("Login pressed: password");
-    console.log(this.password);
-    // setState({ password: event.target.value });
-    console.log("this._child.current.someMethod()");
-    // console.log(this._child.current.someMethod());
-    // process the fetch and store the result in response
     fetch("http://131.181.190.87:3000/user/login", {
       method: "POST",
       mode: "cors", // no-cors, *cors, same-origin
@@ -69,59 +66,33 @@ class Login extends Component {
         response.json();
       } else {
         console.log("logged in");
-        auth.login();
-        console.log("auth.isAuthenticated");
-        console.log(auth.isAuthenticated());
 
-        this.props.history.push("/");
+        // Destructuring assignment
+        const user = this.state.email;
+        const rememberMe = this.state.rememberMe;
+
+        localStorage.setItem("rememberMe", rememberMe);
+        localStorage.setItem("user", rememberMe ? user : "");
+
         response = response.json();
-
-        //  email address of the user (email), the expiry date of the token
-        // (exp), and the issued at time (iat)
-        // The token will only be valid as long as the expiry date has not
-        // passed.
-        // store the token using localstorage : see here:
-        //  https://www.w3schools.com/html/html5_webstorage.asp
-        // In our
-        // case, saving the token is as simple as storing it in
-        // localstorage after the login request is successful.
-        // use
-        // To access the token from anywhere in your program, you can use the following command (assuming
-        //   you have also used “token” as the key location):
-        //      let token = localStorage.getItem("token");
-        //         Authenticated Requests
-        // Once we have the token, the next step is to use it. When making an authenticated request, you must
-        // pass the Authorization header. An example template can be seen below and you may wish to
-        // extend it to your assignment:
-        // const url = `${APRI_URL}/route`
-        // const token = localStorage.getItem("token");
-        // const headers = {
-        //   accept: "application/json",
-        //   "Content-Type: "application/json",
-        //   Authorization:  `Bearer ${token}`
-        // },
-
-        // return fetch(url, {headers})
-        //   .then((res) => res.json())
-        //   .then((res) => {
-        //     console.log(res)
-        //   })
-        //       Redirecting the user to the login page, or indicating through an error message to
-        // the user that they must login again is considered a best practice when it comes to web design. You
-        // can either track the expiry date of the token using the exp timestamp stored in the decoded token,
-        // or await an error from the API indicating the expiration has occurred.
-
-        response.then(function (data) {
-          console.log("decoded token");
-          console.log(jwt.decode(data.token));
+        response.then((data) => {
+          console.log(data.token);
+          console.log("Token Processed");
+          localStorage.setItem("token", data.token);
         });
 
-        // Change the state in Nav so that it says logout
+        this.props.history.push(`/`);
       }
     });
 
     event.preventDefault();
   }
+  handleChange = (event) => {
+    const input = event.target;
+    const value = input.type === "checkbox" ? input.checked : input.value;
+
+    this.setState({ [input.name]: value });
+  };
   render() {
     return (
       <div className="Login">
@@ -151,10 +122,18 @@ class Login extends Component {
           >
             Login
           </Button>
+          <label>
+            <input
+              name="rememberMe"
+              checked={this.state.rememberMe}
+              onChange={this.handleChange}
+              type="checkbox"
+            />{" "}
+            Remember me
+          </label>
         </form>
         Not a member?
         <Link to="/register">register here</Link>
-        <div>{/* <Nav ref={this._child} /> */}</div>
       </div>
     );
   }
