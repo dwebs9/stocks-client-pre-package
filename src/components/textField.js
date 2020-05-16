@@ -3,8 +3,8 @@ import React, { useState } from "react";
 function Text_field(props) {
   const [innerIndustry, setInnerIndustry] = useState("");
 
-  // console.log("props");
-  // console.log(props);
+  console.log("innerIndustry");
+  console.log(innerIndustry);
   // console.log(innerIndustry);
 
   return (

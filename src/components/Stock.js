@@ -18,10 +18,14 @@ const columns = [
 
 export default function Stock({ match }) {
   const [rowData, setRowData] = useState([]);
+
   let symbol = match.params.id;
   console.log("#####DEBUG: The value of {symbol}");
   let token = localStorage.getItem("token");
-  token = token.substring(1, token.length - 1);
+
+  if (token != null) {
+    token = token.substring(1, token.length - 1);
+  }
 
   const url = `http://131.181.190.87:3000/`;
   console.log("#####DEBUG: printing token");
@@ -32,6 +36,8 @@ export default function Stock({ match }) {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
   };
+  const from = "2020-03-15T00:00:00.000Z";
+  const to = "2020-03-20T00:00:00.000Z";
 
   useEffect(() => {
     /// / What should we call here to get the appropiate fetch url ??
@@ -39,13 +45,19 @@ export default function Stock({ match }) {
     if (token != null) {
       console.log("#####DEBUG: printing token");
       console.log(token);
-      fetch(`http://131.181.190.87:3000/stocks/authed/${symbol}`, {
-        headers,
-      }).then((response) => {
+
+      fetch(
+        `http://131.181.190.87:3000/stocks/authed/${symbol}?from=${from}&to=${to}`,
+        {
+          headers,
+        }
+      ).then((response) => {
         console.log("successful");
         let jsonResponse = response.json();
         console.log(jsonResponse);
         jsonResponse.then(function (data) {
+          console.log("data is:");
+          console.log(data);
           setRowData(data);
         });
       });
@@ -57,10 +69,16 @@ export default function Stock({ match }) {
         console.log(jsonResponse);
         jsonResponse.then(function (data) {
           setRowData(data);
+          console.log("data is:");
+          console.log(data);
         });
       });
     }
   }, []);
+
+  const numRows = rowData.length;
+  console.log("numRows");
+  console.log(numRows);
 
   return (
     <div
@@ -68,7 +86,13 @@ export default function Stock({ match }) {
       style={{ height: "500px", width: "600px", align: "center" }}
     >
       You are looking at the {symbol} stock
-      <AgGridReact columnDefs={columns} rowData={[rowData]} />
+      {token != null ? (
+        <AgGridReact columnDefs={columns} rowData={rowData} />
+      ) : (
+        <AgGridReact columnDefs={columns} rowData={[rowData]} />
+      )}
     </div>
   );
 }
+
+// {!props.isauth ? <LoginButton /> : <LogoutButton props={props}

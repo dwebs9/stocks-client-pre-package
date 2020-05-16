@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import TextField from "./TextField";
 import React, { Component } from "react";
+import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 
 class Home extends Component {
   constructor(props) {
@@ -20,8 +20,10 @@ class Home extends Component {
         },
       ],
       rowData: [],
+      value: "",
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -32,8 +34,7 @@ class Home extends Component {
     this.gridColumnApi = params.columnApi;
   };
 
-  componentDidMount = (industry) => {
-    console.log("industry", industry);
+  componentDidMount = () => {
     console.log("componentDidMount() ");
     fetch(`http://131.181.190.87:3000/stocks/symbols`)
       .then((result) => result.json())
@@ -42,19 +43,37 @@ class Home extends Component {
       });
   };
 
-  handleSubmit = (industry) => {
-    console.log("handleSubmit =");
-
-    fetch(`http://131.181.190.87:3000/stocks/symbols?industry=${this.industry}`)
+  handleChange(event) {
+    console.log("Input Changed: event");
+    console.log(event.target.value);
+    this.setState({ value: event.target.value });
+  }
+  handleSubmit(event) {
+    fetch(
+      `http://131.181.190.87:3000/stocks/symbols?industry=${this.state.value}`
+    )
       .then((result) => result.json())
       .then((rowData) => {
         this.setState({ rowData });
       });
-  };
-
-  validateForm() {
-    console.log("validateForm()");
+    event.preventDefault();
   }
+  // handleSubmit(event) {
+
+  // }
+
+  // handleSubmit(event) {
+  //   console.log("THE INDUSTRY");
+  //   console.log(event);
+
+  //   fetch(
+  //     `http://131.181.190.87:3000/stocks/symbols?industry=${event.target.value}`
+  //   )
+  //     .then((result) => result.json())
+  //     .then((rowData) => {
+  //       this.setState({ rowData });
+  //     });
+  // }
 
   doesExternalFilterPass = (node) => {};
   externalFilterChange = (newValue) => {};
@@ -65,7 +84,18 @@ class Home extends Component {
         className="ag-theme-balham"
         style={{ height: "500px", width: "600px", align: "center" }}
       >
-        <TextField onSearch={this.handleSubmit} />
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+
         <AgGridReact
           enableSorting={true}
           animateRows={true}
