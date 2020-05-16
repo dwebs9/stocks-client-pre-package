@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import "./Register.css";
-import auth from "./auth";
 
 class Register extends Component {
   constructor(props) {
@@ -62,9 +61,6 @@ class Register extends Component {
         response.json();
       } else {
         console.log("Registered");
-        auth.login();
-        console.log("auth.isAuthenticated");
-        console.log(auth.isAuthenticated());
 
         this.props.history.push("/");
         response = response.json();

@@ -3,53 +3,41 @@ import jwt from "jsonwebtoken";
 import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import "./Login.css";
 import { Link } from "react-router-dom";
-import auth from "./auth";
+
 import { data } from "./Cb.js";
 import { AuthContext } from "../App";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "enter@email.com",
-      password: "password",
-      rememberMe: false,
-      token: "",
-    };
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+export const Login = () => {
+  const { dispatch } = React.useContext(AuthContext);
+  const initialState = {
+    email: "",
+    password: "",
+    isSubmitting: false,
+    errorMessage: null,
+  };
+  const [data, setData] = React.useState(initialState);
 
-  validateForm() {
-    console.log("validateForm()");
-  }
+  const handleInputChange = (event) => {
+    console.log("input changed");
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  componentDidMount() {
-    console.log("componentDidMount()");
-    console.log(this.props);
-    const rememberMe = localStorage.getItem("rememberMe") === "true";
-    const user = rememberMe ? localStorage.getItem("user") : "";
-    let authToken = localStorage.getItem("token");
-    this.setState({ user, rememberMe });
-    this.setState({ token: authToken });
-  }
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
 
-  handleEmailChange(event) {
-    this.setState({ email: event.target.value });
-    console.log("handleEmailChange(event)");
-    console.log("Email");
-    console.log(this.state.email);
-  }
-  handlePasswordChange(event) {
-    this.setState({ password: event.target.value });
-    console.log("handlePasswordChange(event)");
-    console.log("password:");
+    setData({
+      ...data,
+      isSubmitting: true,
+      errorMessage: null,
+    });
 
-    console.log(this.state.password);
-  }
+    console.log("email :");
+    console.log(data.email);
+    console.log(data.password);
 
-  handleSubmit(event) {
     fetch("http://131.181.190.87:3000/user/login", {
       method: "POST",
       mode: "cors", // no-cors, *cors, same-origin
@@ -57,86 +45,80 @@ class Login extends Component {
       credentials: "same-origin", // include, *same-origin, omit
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
+        email: data.email,
+        password: data.password,
       }),
-    }).then((response) => {
-      if (!response.ok) {
-        console.log("Unsuccessful login, try again");
-        response.json();
-      } else {
-        console.log("logged in");
+    })
+      .then((res) => {
+        console.log("email :");
+        console.log(data.email);
+        console.log(data.password);
 
-        // Destructuring assignment
-        const user = this.state.email;
-        const rememberMe = this.state.rememberMe;
-
-        localStorage.setItem("rememberMe", rememberMe);
-        localStorage.setItem("user", rememberMe ? user : "");
-
-        response = response.json();
-        response.then((data) => {
-          console.log(data.token);
-          console.log("Token Processed");
-          localStorage.setItem("token", data.token);
+        if (res.ok) {
+          console.log("response is ok");
+          return res.json();
+        }
+        console.log("response is  not ok");
+        throw res.json();
+      })
+      .then((resJson) => {
+        console.log("dispatch LOGIN");
+        console.log("response");
+        dispatch({
+          type: "LOGIN",
+          payload: resJson,
         });
-
-        this.props.history.push(`/`);
-      }
-    });
-
-    event.preventDefault();
-  }
-  handleChange = (event) => {
-    const input = event.target;
-    const value = input.type === "checkbox" ? input.checked : input.value;
-
-    this.setState({ [input.name]: value });
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          isSubmitting: false,
+          errorMessage: error.message || error.statusText,
+        });
+      });
   };
-  render() {
-    return (
-      <div className="Login">
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
-            <Form.Label>Email address</Form.Label>
-            <FormControl
-              autoFocus
-              type="email"
-              value={this.email}
-              onChange={this.handleEmailChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <Form.Label>Password</Form.Label>
-            <FormControl
-              value={this.password}
-              onChange={this.handlePasswordChange}
-              type="password"
-            />
-          </FormGroup>
-          <Button
-            block
-            bsSize="large"
-            disabled={this.validateForm()}
-            type="submit"
-          >
-            Login
-          </Button>
-          <label>
-            <input
-              name="rememberMe"
-              checked={this.state.rememberMe}
-              onChange={this.handleChange}
-              type="checkbox"
-            />{" "}
-            Remember me
-          </label>
-        </form>
-        Not a member?
-        <Link to="/register">register here</Link>
+
+  return (
+    <div className="login-container">
+      <div className="card">
+        <div className="container">
+          <form onSubmit={handleFormSubmit}>
+            <h1>Login</h1>
+
+            <label htmlFor="email">
+              Email Address
+              <input
+                type="text"
+                value={data.email}
+                onChange={handleInputChange}
+                name="email"
+                id="email"
+              />
+            </label>
+
+            <label htmlFor="password">
+              Password
+              <input
+                type="password"
+                value={data.password}
+                onChange={handleInputChange}
+                name="password"
+                id="password"
+              />
+            </label>
+
+            {data.errorMessage && (
+              <span className="form-error">{data.errorMessage}</span>
+            )}
+
+            <button disabled={data.isSubmitting}>
+              {data.isSubmitting ? "Loading..." : "Login"}
+            </button>
+          </form>
+        </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Login;
