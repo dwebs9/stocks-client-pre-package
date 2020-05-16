@@ -24,7 +24,7 @@ const headers = {
 };
 export const AuthContext = React.createContext();
 
-const initialState = {
+var initialState = {
   isAuthenticated: false,
   user: null,
   token: null,
@@ -59,7 +59,16 @@ const reducer = (state, action) => {
 ///// Attempted the login/loggout implementation via freeCodeCamp
 // Also see slack thread
 function App() {
+  if (token != null) {
+    console.log("token != null");
+    initialState = {
+      isAuthenticated: true,
+      user: localStorage.getItem("user"),
+      token: token,
+    };
+  }
   const [state, dispatch] = React.useReducer(reducer, initialState);
+
   return (
     <AuthContext.Provider
       value={{
@@ -73,7 +82,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/stock/:id/" component={Stock} />
-            <Route path="/stock/ " exact component={Stock} />
+
             <Route path="/stock/auth/id: " exact component={Stock} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />

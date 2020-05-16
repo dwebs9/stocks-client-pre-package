@@ -20,18 +20,46 @@ export default function Stock({ match }) {
   const [rowData, setRowData] = useState([]);
   let symbol = match.params.id;
   console.log("#####DEBUG: The value of {symbol}");
+  let token = localStorage.getItem("token");
+  token = token.substring(1, token.length - 1);
+
+  const url = `http://131.181.190.87:3000/`;
+  console.log("#####DEBUG: printing token");
+  console.log(token);
+
+  const headers = {
+    accept: "application/json",
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
 
   useEffect(() => {
     /// / What should we call here to get the appropiate fetch url ??
     // !!! WARING !!! React Hook useEffect has a missing dependency: 'symbol'
-    fetch(`http://131.181.190.87:3000/stocks/${symbol}`).then((response) => {
-      console.log("successful");
-      let jsonResponse = response.json();
-      console.log(jsonResponse);
-      jsonResponse.then(function (data) {
-        setRowData(data);
+    if (token != null) {
+      console.log("#####DEBUG: printing token");
+      console.log(token);
+      fetch(`http://131.181.190.87:3000/stocks/authed/${symbol}`, {
+        headers,
+      }).then((response) => {
+        console.log("successful");
+        let jsonResponse = response.json();
+        console.log(jsonResponse);
+        jsonResponse.then(function (data) {
+          setRowData(data);
+        });
       });
-    });
+    } else {
+      console.log("Token is null");
+      fetch(`http://131.181.190.87:3000/stocks/${symbol}`).then((response) => {
+        console.log("successful");
+        let jsonResponse = response.json();
+        console.log(jsonResponse);
+        jsonResponse.then(function (data) {
+          setRowData(data);
+        });
+      });
+    }
   }, []);
 
   return (
@@ -44,26 +72,3 @@ export default function Stock({ match }) {
     </div>
   );
 }
-
-// useEffect(() => {
-//   /// / What should we call here to get the appropiate fetch url ??
-//   fetch(`http://131.181.190.87:3000/stocks/${symbol}`)
-//     .then((res) => res.json())
-//     .then((data) => data.works)
-//     .then((works) =>
-//       works.ma((stock) => {
-//         return {
-//           close: stock.close,
-//           high: stock.high,
-//           industry: stock.industry,
-//           low: stock.low,
-//           name: stock.name,
-//           open: stock.open,
-//           symbol: stock.symbol,
-//           timestamp: stock.timestamp,
-//           volumes: stock.volumes,
-//         };
-//       })
-//     )
-//     .then((stock) => this.setState({ rowData: stock }));
-// }, []);
