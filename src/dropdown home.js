@@ -3,7 +3,6 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
 import {
   Dropdown,
   DropdownToggle,
@@ -67,7 +66,7 @@ class Home extends Component {
       .then((result) => {
         if (result.ok) {
           console.log("Search ok");
-          return result.json();
+          result.json();
         } else {
           console.log("Search not ok");
           this.setState({ rowData: [] });
@@ -83,57 +82,35 @@ class Home extends Component {
     event.preventDefault();
   }
 
-  doesExternalFilterPass = (node) => {};
-  externalFilterChange = (newValue) => {};
-
   toggle(event) {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
-
   select(event) {
-    console.log("select fired: event");
-    console.log(event.target.value);
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-      dropdownValue: event.target.value,
-    });
-    console.log("this.state.dropdownValue");
-    console.log(this.state.dropdownValue);
-    if (event.target.value === "All Industries") {
-      fetch(`http://131.181.190.87:3000/stocks/symbols`)
-        .then((result) => {
-          if (result.ok) {
-            console.log("Search ok");
-            return result.json();
-          } else {
-            console.log("Search not ok");
-            this.setState({ rowData: [] });
-          }
-        })
-        .then((rowData) => {
-          console.log("Row data set: length");
-
-          this.setState({ rowData });
-        });
-    } else {
-      fetch(
-        `http://131.181.190.87:3000/stocks/symbols?industry=${event.target.value}`
-      )
-        .then((result) => {
-          if (result.ok) {
-            console.log("Search ok");
-            return result.json();
-          } else {
-            console.log("Search not ok");
-            this.setState({ rowData: [] });
-          }
-        })
-        .then((rowData) => {
-          console.log("Row data set: length");
-          console.log(this.state.rowData.length);
-          this.setState({ rowData });
-        });
-    }
+    // console.log("select fired: event");
+    // console.log(event.target.value);
+    // this.setState({
+    //   dropdownOpen: !this.state.dropdownOpen,
+    //   dropdownValue: event.target.value,
+    // });
+    // console.log("this.state.dropdownValue");
+    // console.log(this.state.dropdownValue);
+    // fetch(
+    //   `http://131.181.190.87:3000/stocks/symbols?industry=${this.state.dropdownValue}`
+    // )
+    //   .then((result) => {
+    //     if (result.ok) {
+    //       console.log("Search ok");
+    //       result.json();
+    //     } else {
+    //       console.log("Search not ok");
+    //       this.setState({ rowData: [] });
+    //     }
+    //   })
+    //   .then((rowData) => {
+    //     console.log("Row data set: length");
+    //     console.log(this.state.rowData.length);
+    //     this.setState({ rowData });
+    //   });
   }
 
   render() {
@@ -172,8 +149,8 @@ class Home extends Component {
             <DropdownItem value="Material" onClick={this.select}>
               Material
             </DropdownItem>
-            <DropdownItem value="Real Estate" onClick={this.select}>
-              Real Estate
+            <DropdownItem value="Realestate" onClick={this.select}>
+              Realestate
             </DropdownItem>
             <DropdownItem
               value="Telecommunication Services"
@@ -181,9 +158,7 @@ class Home extends Component {
             >
               Telecommunication Services
             </DropdownItem>
-            <DropdownItem value="Utilities" onClick={this.select}>
-              Utilites
-            </DropdownItem>
+            <DropdownItem value="Utilites">Utilites</DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <form onSubmit={this.handleSubmit}>
