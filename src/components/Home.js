@@ -45,7 +45,7 @@ class Home extends Component {
   };
 
   componentDidMount = () => {
-    console.log("componentDidMount() ");
+    console.log("!!!componentDidMount()!!! ");
     fetch(`http://131.181.190.87:3000/stocks/symbols`)
       .then((result) => result.json())
       .then((rowData) => {
@@ -59,6 +59,8 @@ class Home extends Component {
     this.setState({ value: event.target.value });
   }
   handleSubmit(event) {
+    console.log("This.state.rowData");
+    console.log(this.state.rowData);
     console.log("This.state.value");
     console.log(this.state.value);
     fetch(

@@ -10,8 +10,6 @@ const initialState = {
 export const LogoutButton = (props) => {
   const { dispatch } = React.useContext(AuthContext);
 
-  console.log(dispatch);
-
   const handleLogout = () => {
     console.log("handleLogout");
     dispatch({

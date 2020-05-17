@@ -11,12 +11,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { PropertyKeys } from "ag-grid-community";
-
-const url = `http://131.181.190.87:3000/`;
 const token = localStorage.getItem("token");
-console.log("token");
-console.log(token);
 const headers = {
   accept: "application/json",
   "Content-Type": "application/json",
@@ -56,11 +51,9 @@ const reducer = (state, action) => {
       return state;
   }
 };
-///// Attempted the login/loggout implementation via freeCodeCamp
-// Also see slack thread
+
 function App() {
   if (token != null) {
-    console.log("token != null");
     initialState = {
       isAuthenticated: true,
       user: localStorage.getItem("user"),
