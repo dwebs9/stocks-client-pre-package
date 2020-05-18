@@ -5,6 +5,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import React, { useState, useEffect, Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Line } from "react-chartjs-2";
 
 let token = localStorage.getItem("token");
 
@@ -37,10 +38,22 @@ class Stock extends Component {
       fromDate: new Date("2020-03-20T14:00:00.000Z"),
       toDate: new Date("2020-03-24T14:00:00.000Z"),
       symbol: props.match.params.id,
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [
+          {
+            label: "Second dataset",
+            data: [33, 25, 35, 51, 54, 76],
+            fill: false,
+            borderColor: "#742774",
+          },
+        ],
+      },
     };
     this.handleFromChange = this.handleFromChange.bind(this);
     this.handleToChange = this.handleToChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.populateChart = this.populateChart.bind(this);
   }
 
   componentDidMount = () => {
@@ -57,8 +70,42 @@ class Stock extends Component {
       .then((data) => {
         console.log(data);
         this.setState({ rowData: data });
+        this.populateChart(data);
       });
   };
+
+  // Extract the timestamps and format them into an array
+  // form the close times into an array for datasets.data
+  // take the symbol and set it as the lable
+  // Finally, update the data state
+
+  populateChart(rowData) {
+    console.log("#####DEBUG: populateChart() ");
+    var label = [];
+    var closeData = [];
+
+    console.log(rowData.length);
+    var i;
+
+    for (i = 0; i < rowData.length; i++) {
+      console.log(rowData[i].timestamp);
+      label.push(rowData[i].timestamp);
+      closeData.push(rowData[i].close);
+    }
+
+    var newChartData = {
+      labels: label,
+      datasets: [
+        {
+          label: this.state.symbol,
+          data: closeData,
+          fill: false,
+          borderColor: "#742774",
+        },
+      ],
+    };
+    this.setState({ data: newChartData });
+  }
 
   handleFromChange = (date) => {
     console.log("from data changedd");
@@ -81,6 +128,7 @@ class Stock extends Component {
       .then((data) => {
         console.log(data);
         this.setState({ rowData: data });
+        this.populateChart(data);
       });
   }
 
@@ -121,6 +169,7 @@ class Stock extends Component {
             onChange={this.handleToChange}
           />
         )}
+        <Line data={this.state.data} />
       </div>
     );
   }
