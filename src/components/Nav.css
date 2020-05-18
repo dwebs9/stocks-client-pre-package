@@ -4,97 +4,30 @@ nav {
   align-items: center;
   text-decoration-color: #26984b;
   min-height: 10vh;
-  background: #ccb069;
+  background: #6e7377;
   border-bottom: 4px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 5px solid rgba(0, 0, 0, 0.05);
+  border-left: 5px solid rgba(0, 0, 0, 0.05);
+  border-right: 5px solid rgba(0, 0, 0, 0.05);
   padding: 1.7rem 0;
   position: relative;
   z-index: 2;
-}
-
-*/ .special-card {
-  opacity: 0.9;
 }
 
 .holder {
   width: auto;
   display: inline-block;
 }
-
-.holder img {
-  width: 30%;
-  /* Will shrink image to 30% of its original width */
-  height: auto;
-}
-
-.text-light-blue {
-  color: #698abd;
-}
-
-.bg-base-green {
-  background-color: #3c4631;
-}
-
-.bg-base-blue {
-  background-color: #263346;
-}
-
-.btn-bg-dp {
-  background-color: #de8439;
-}
-
-.aaa {
-  width: 60% !important;
-  float: left;
-}
-
-.bbb {
-  width: 30% !important;
-  float: left;
-  margin-top: 24px;
-  margin-left: 5%;
-}
-
-.jumbotron {
-  height: 300px;
-}
-
-.wrap {
-  /* Your styling. */
-  position: absolute;
-  z-index: 999999;
-  right: 0;
-  height: 60%;
-  text-align: center;
-
-  /* Solution part I. */
-  display: table;
-}
-
-/* Solution part II. */
-
-.inside {
-  width: 100%;
-  height: 100%;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.text-style {
-  color: #26984b;
-  border-bottom: 4px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 1.7rem 0;
-  position: relative;
-  z-index: 2;
-  border-bottom: 4px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+/* change the link color */
+.navbar-custom {
+  color: rgba(255, 255, 255, 0.5);
 }
 .nav-links {
   width: 50%;
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   align-items: center;
+  color: #26984b;
   list-style: none;
   display: flex;
   color: #26984b;
@@ -104,14 +37,7 @@ nav {
   color: white;
   border-bottom: 4px solid rgba(0, 0, 0, 0.05);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 1.7rem 0;
-  position: relative;
-  z-index: 2;
-  border-bottom: 4px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 1.7rem 0;
-  position: relative;
-  z-index: 2;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 img {
