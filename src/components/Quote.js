@@ -18,8 +18,7 @@ const headers = {
   Authorization: `Bearer ${token}`,
 };
 
-// ({ match })
-class Stock extends Component {
+class Quote extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +34,7 @@ class Stock extends Component {
         { headerName: "Volumes", field: "volumes" },
       ],
       rowData: [],
-      fromDate: new Date("2020-03-20T14:00:00.000Z"),
+      fromDate: new Date("2020-03-22T14:00:00.000Z"),
       toDate: new Date("2020-03-24T14:00:00.000Z"),
       symbol: props.match.params.id,
       data: {
@@ -73,11 +72,6 @@ class Stock extends Component {
         this.populateChart(data);
       });
   };
-
-  // Extract the timestamps and format them into an array
-  // form the close times into an array for datasets.data
-  // take the symbol and set it as the lable
-  // Finally, update the data state
 
   populateChart(rowData) {
     console.log("#####DEBUG: populateChart() ");
@@ -175,4 +169,4 @@ class Stock extends Component {
   }
 }
 
-export default Stock;
+export default Quote;

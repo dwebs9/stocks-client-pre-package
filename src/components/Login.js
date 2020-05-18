@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import jwt from "jsonwebtoken";
-import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
+import { Button, FormGroup, FormControl, Form, Modal } from "react-bootstrap";
 import "./Login.css";
 import { Link } from "react-router-dom";
 
 import { data } from "./Cb.js";
 import { AuthContext } from "../App";
 
-export const Login = () => {
+export const Login = (props) => {
   const { dispatch } = React.useContext(AuthContext);
   const initialState = {
     email: "",
@@ -15,7 +15,18 @@ export const Login = () => {
     isSubmitting: false,
     errorMessage: null,
   };
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [show, setShow] = useState(false);
+
   const [data, setData] = React.useState(initialState);
+
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+  };
 
   const handleInputChange = (event) => {
     console.log("input changed");
@@ -40,9 +51,9 @@ export const Login = () => {
 
     fetch("http://131.181.190.87:3000/user/login", {
       method: "POST",
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: data.email,
@@ -59,6 +70,7 @@ export const Login = () => {
           return res.json();
         }
         console.log("response is  not ok");
+        setShow(true);
         throw res.json();
       })
       .then((resJson) => {
@@ -68,8 +80,10 @@ export const Login = () => {
           type: "LOGIN",
           payload: resJson,
         });
+        props.history.push(`/`);
       })
       .catch((error) => {
+        setShow(true);
         setData({
           ...data,
           isSubmitting: false,
@@ -112,11 +126,25 @@ export const Login = () => {
             )}
 
             <button disabled={data.isSubmitting}>
-              {data.isSubmitting ? "Loading..." : "Login"}
+              {data.isSubmitting ? "Loading" : "Login"}
             </button>
           </form>
         </div>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Whoops...</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Username or password incorrect.
+          {errorMessage}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

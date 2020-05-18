@@ -1,10 +1,22 @@
 import { Link } from "react-router-dom";
 import patrick from "../static/patrick_edited.png";
 import moss from "../static/moss_edited.png";
-
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText,
+} from "reactstrap";
 import React, { Component, useContext } from "react";
 import navStyle from "./Nav.css";
-import { AuthContext } from "../App";
 import LogoutButton from "./LogoutButton";
 import LoginButton from "./LoginButton";
 
@@ -14,7 +26,7 @@ const imgStyle = {
   width: "25%",
 };
 
-function Nav(props) {
+function NavComp(props) {
   return (
     <nav class="navbar navbar-expand bg-base-blue text-white py-2">
       <img src={patrick} alt="Logo" style={imgStyle} />
@@ -23,7 +35,7 @@ function Nav(props) {
           <li>Home</li>
         </Link>
         <Link to="/stock/A">
-          <li>Stocks</li>
+          <li>Quote</li>
         </Link>
         <div>
           {!props.isauth ? <LoginButton /> : <LogoutButton props={props} />}
@@ -34,4 +46,4 @@ function Nav(props) {
   );
 }
 
-export default Nav;
+export default NavComp;

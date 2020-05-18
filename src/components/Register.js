@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
+import { Button, FormGroup, FormControl, Form, Modal } from "react-bootstrap";
 import "./Register.css";
 
 class Register extends Component {
@@ -10,15 +10,25 @@ class Register extends Component {
       email: "your@email.com",
       password: "password",
       registrationErrors: "",
+      errorMessage: null,
+      show: false,
     };
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleShow = this.handleShow.bind(this);
   }
   validateForm() {
     console.log("validateForm()");
   }
+  handleClose() {
+    this.setState({ show: false });
+  }
 
+  handleShow() {
+    this.setState({ show: true });
+  }
   handleEmailChange(event) {
     console.log("email: event.target.value");
     console.log(event.target);
@@ -37,6 +47,7 @@ class Register extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
     console.log("handleSubmit(event)");
     console.log("Login pressed: email");
     console.log(this.email);
@@ -55,61 +66,31 @@ class Register extends Component {
         email: this.state.email,
         password: this.state.password,
       }),
-    }).then((response) => {
-      if (!response.ok) {
-        console.log("Unsuccessful regi");
-        response.json();
-      } else {
-        console.log("Registered");
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log("Unsuccessful regi");
+          this.setState({ show: true });
+          throw response.json();
+        } else {
+          console.log("Registered");
 
-        this.props.history.push("/");
-        response = response.json();
+          this.props.history.push("/login");
+          response = response.json();
 
-        //  email address of the user (email), the expiry date of the token
-        // (exp), and the issued at time (iat)
-        // The token will only be valid as long as the expiry date has not
-        // passed.
-        // store the token using localstorage : see here:
-        //  https://www.w3schools.com/html/html5_webstorage.asp
-        // In our
-        // case, saving the token is as simple as storing it in
-        // localstorage after the login request is successful.
-        // use
-        // To access the token from anywhere in your program, you can use the following command (assuming
-        //   you have also used “token” as the key location):
-        //      let token = localStorage.getItem("token");
-        //         Authenticated Requests
-        // Once we have the token, the next step is to use it. When making an authenticated request, you must
-        // pass the Authorization header. An example template can be seen below and you may wish to
-        // extend it to your assignment:
-        // const url = `${APRI_URL}/route`
-        // const token = localStorage.getItem("token");
-        // const headers = {
-        //   accept: "application/json",
-        //   "Content-Type: "application/json",
-        //   Authorization:  `Bearer ${token}`
-        // },
-
-        // return fetch(url, {headers})
-        //   .then((res) => res.json())
-        //   .then((res) => {
-        //     console.log(res)
-        //   })
-        //       Redirecting the user to the login page, or indicating through an error message to
-        // the user that they must login again is considered a best practice when it comes to web design. You
-        // can either track the expiry date of the token using the exp timestamp stored in the decoded token,
-        // or await an error from the API indicating the expiration has occurred.
-
-        response.then(function (data) {
-          console.log("response data");
-          console.log(data);
+          response.then(function (data) {
+            console.log("response data");
+            console.log(data);
+          });
+        }
+      })
+      // Change the state in Nav so that it says logout
+      .catch((error) => {
+        this.setState({ show: true });
+        this.setState({
+          errorMessage: error.message || error.statusText,
         });
-
-        // Change the state in Nav so that it says logout
-      }
-    });
-
-    event.preventDefault();
+      });
   }
 
   render() {
@@ -143,6 +124,19 @@ class Register extends Component {
             Register
           </Button>
         </form>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Whoops...</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Username or password is invalid. Error: {this.state.errorMessage}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

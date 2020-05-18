@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Nav from "./components/Nav";
+import NavComp from "./components/Nav";
 import Home from "./components/Home";
 import Logout from "./components/LogoutButton";
 import LoginButton from "./components/LoginButton";
-import Stock from "./components/Stock";
+import Quote from "./components/Quote";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -71,12 +71,12 @@ function App() {
     >
       <Router>
         <div className="App">
-          <Nav isauth={state.isAuthenticated} dispatch={dispatch} />
+          <NavComp isauth={state.isAuthenticated} dispatch={dispatch} />
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/stock/:id/" component={Stock} />
+            <Route path="/stock/:id/" component={Quote} />
 
-            <Route path="/stock/auth/id: " exact component={Stock} />
+            <Route path="/stock/auth/id: " exact component={Quote} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>

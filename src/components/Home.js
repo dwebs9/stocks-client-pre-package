@@ -3,7 +3,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, Form } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import {
   Dropdown,
   DropdownToggle,
@@ -14,7 +14,6 @@ import {
 class Home extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       columnDefs: [
         { headerName: "Name", field: "name" },
@@ -29,12 +28,16 @@ class Home extends Component {
       value: "",
       dropdownOpen: false,
       dropdownValue: "All Industries",
+      errorMessage: null,
+      show: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.select = this.select.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleShow = this.handleShow.bind(this);
   }
 
   onGridReady = (params) => {
@@ -44,71 +47,89 @@ class Home extends Component {
     this.gridColumnApi = params.columnApi;
   };
 
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
   componentDidMount = () => {
-    console.log("!!!componentDidMount()!!! ");
     fetch(`http://131.181.190.87:3000/stocks/symbols`)
-      .then((result) => result.json())
+      .then((result) => {
+        if (result.ok) {
+          return result.json();
+        }
+
+        throw result.json();
+      })
       .then((rowData) => {
         this.setState({ rowData });
+      })
+      .catch((error) => {
+        this.setState({ show: true });
+        this.setState({
+          errorMessage: error.message || error.statusText,
+        });
       });
   };
 
   handleChange(event) {
-    console.log("Input Changed: event");
-    console.log(event.target.value);
     this.setState({ value: event.target.value });
   }
-  handleSubmit(event) {
-    console.log("This.state.rowData");
-    console.log(this.state.rowData);
-    console.log("This.state.value");
-    console.log(this.state.value);
-    fetch(
-      `http://131.181.190.87:3000/stocks/symbols?industry=${this.state.value}`
-    )
-      .then((result) => {
-        if (result.ok) {
-          console.log("Search ok");
-          return result.json();
-        } else {
-          console.log("Search not ok");
-          this.setState({ rowData: [] });
-        }
-      })
-      .then((rowData) => {
-        console.log("Rowdataseti");
-        console.log(this.state.rowData);
 
-        this.setState({ rowData });
-        console.log(this.state.rowData);
-      });
+  handleSubmit(event) {
     event.preventDefault();
+    if (this.state.value === "") {
+      fetch(`http://131.181.190.87:3000/stocks/symbols`)
+        .then((result) => {
+          if (result.ok) {
+            return result.json();
+          }
+
+          throw result.json();
+        })
+        .then((rowData) => {
+          this.setState({ rowData });
+        })
+        .catch((error) => {
+          this.setState({ show: true });
+          this.setState({
+            errorMessage: error.message || error.statusText,
+          });
+        });
+    } else {
+      fetch(
+        `http://131.181.190.87:3000/stocks/symbols?industry=${this.state.value}`
+      )
+        .then((result) => {
+          if (result.ok) {
+            return result.json();
+          } else {
+            this.setState({ rowData: [] });
+          }
+        })
+        .then((rowData) => {
+          this.setState({ rowData });
+        });
+    }
   }
 
-  doesExternalFilterPass = (node) => {};
-  externalFilterChange = (newValue) => {};
-
-  toggle(event) {
+  toggle() {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   }
 
   select(event) {
-    console.log("select fired: event");
-    console.log(event.target.value);
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
       dropdownValue: event.target.value,
     });
-    console.log("this.state.dropdownValue");
-    console.log(this.state.dropdownValue);
     if (event.target.value === "All Industries") {
       fetch(`http://131.181.190.87:3000/stocks/symbols`)
         .then((result) => {
           if (result.ok) {
-            console.log("Search ok");
             return result.json();
           } else {
-            console.log("Search not ok");
             this.setState({ rowData: [] });
           }
         })
@@ -123,10 +144,8 @@ class Home extends Component {
       )
         .then((result) => {
           if (result.ok) {
-            console.log("Search ok");
             return result.json();
           } else {
-            console.log("Search not ok");
             this.setState({ rowData: [] });
           }
         })
@@ -214,6 +233,20 @@ class Home extends Component {
           columnDefs={this.state.columnDefs}
           rowData={this.state.rowData}
         ></AgGridReact>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Whoops...</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            There was a problem connecting with the server. Error:{" "}
+            {this.state.errorMessage}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
