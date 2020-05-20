@@ -1,11 +1,10 @@
-/*
- The css style for
-*/
-.App {
+.home {
   text-align: center;
   background-color: #f93800;
   font-size: 0.85rem;
   padding: 0.7em 1.25em;
-
-  border: 1px solid transparent;
 }
+
+/* .navbar-nav > li > .dropdown-menu {
+  background-color: #ff0000;
+} */

@@ -20,10 +20,17 @@ export const LogoutButton = (props) => {
       props.history.push(`/`);
     }
   };
+
+  const liColour = {
+    color: "white",
+  };
+
   return (
     <React.Fragment>
       <Link to="/">
-        <li onClick={handleLogout}>Logout</li>
+        <li onClick={handleLogout} style={liColour}>
+          Logout
+        </li>
       </Link>
     </React.Fragment>
   );

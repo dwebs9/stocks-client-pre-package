@@ -12,15 +12,23 @@ const initialState = {
   isFetching: false,
   hasError: false,
 };
+
+const liColour = {
+  color: "white",
+  size: "50%",
+  padding: "5px",
+};
+
 const reducer = (state, action) => {};
+
 export const LoginButton = () => {
   return (
     <React.Fragment>
       <Link to="/login">
-        <li>Login</li>
+        <li style={liColour}>Login</li>
       </Link>
       <Link to="/register">
-        <li>Register</li>
+        <li style={liColour}>Register</li>
       </Link>
     </React.Fragment>
   );

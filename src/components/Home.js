@@ -3,13 +3,22 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import React, { Component } from "react";
-import { Button, Modal } from "react-bootstrap";
+
 import {
+  Button,
+  Modal,
+  Form,
+  Label,
+  Input,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Container,
+  Col,
+  Row,
 } from "reactstrap";
+import "./Home.css";
 
 class Home extends Component {
   constructor(props) {
@@ -163,61 +172,81 @@ class Home extends Component {
         className="ag-theme-balham"
         style={{ height: "500px", width: "600px", align: "center" }}
       >
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-          <DropdownToggle>{this.dropdownValue}</DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem value="All Industries" onClick={this.select}>
-              All Industries
-            </DropdownItem>
-            <DropdownItem value="Consumer Discretionary" onClick={this.select}>
-              Consumer Discretionary
-            </DropdownItem>
-            <DropdownItem value="Consumer Staples" onClick={this.select}>
-              Consumer Staples
-            </DropdownItem>
-            <DropdownItem value="Energy" onClick={this.select}>
-              Energy
-            </DropdownItem>
-            <DropdownItem value="Financials" onClick={this.select}>
-              Financials
-            </DropdownItem>
-            <DropdownItem value="Health Care" onClick={this.select}>
-              Health Care
-            </DropdownItem>
-            <DropdownItem value="Industrials" onClick={this.select}>
-              Industrials
-            </DropdownItem>
-            <DropdownItem value="Information Technology" onClick={this.select}>
-              Information Technology
-            </DropdownItem>
-            <DropdownItem value="Material" onClick={this.select}>
-              Material
-            </DropdownItem>
-            <DropdownItem value="Real Estate" onClick={this.select}>
-              Real Estate
-            </DropdownItem>
-            <DropdownItem
-              value="Telecommunication Services"
-              onClick={this.select}
-            >
-              Telecommunication Services
-            </DropdownItem>
-            <DropdownItem value="Utilities" onClick={this.select}>
-              Utilites
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <Container>
+          <Row xs="2">
+            <Col xs="5">
+              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                <DropdownToggle caret color="warning" size="sm">
+                  {this.state.dropdownValue}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem value="All Industries" onClick={this.select}>
+                    All Industries
+                  </DropdownItem>
+                  <DropdownItem
+                    value="Consumer Discretionary"
+                    onClick={this.select}
+                  >
+                    Consumer Discretionary
+                  </DropdownItem>
+                  <DropdownItem value="Consumer Staples" onClick={this.select}>
+                    Consumer Staples
+                  </DropdownItem>
+                  <DropdownItem value="Energy" onClick={this.select}>
+                    Energy
+                  </DropdownItem>
+                  <DropdownItem value="Financials" onClick={this.select}>
+                    Financials
+                  </DropdownItem>
+                  <DropdownItem value="Health Care" onClick={this.select}>
+                    Health Care
+                  </DropdownItem>
+                  <DropdownItem value="Industrials" onClick={this.select}>
+                    Industrials
+                  </DropdownItem>
+                  <DropdownItem
+                    value="Information Technology"
+                    onClick={this.select}
+                  >
+                    Information Technology
+                  </DropdownItem>
+                  <DropdownItem value="Material" onClick={this.select}>
+                    Material
+                  </DropdownItem>
+                  <DropdownItem value="Real Estate" onClick={this.select}>
+                    Real Estate
+                  </DropdownItem>
+                  <DropdownItem
+                    value="Telecommunication Services"
+                    onClick={this.select}
+                  >
+                    Telecommunication Services
+                  </DropdownItem>
+                  <DropdownItem value="Utilities" onClick={this.select}>
+                    Utilites
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </Col>
+          </Row>
+        </Container>
+        <Container>
+          <Col xs="auto">
+            <Form onSubmit={this.handleSubmit}>
+              <Label>
+                <Input
+                  type="text"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                />
+              </Label>
+
+              <Button color="warning" type="submit" size="sm" value="Search">
+                Search
+              </Button>
+            </Form>
+          </Col>
+        </Container>
 
         <AgGridReact
           enableSorting={true}

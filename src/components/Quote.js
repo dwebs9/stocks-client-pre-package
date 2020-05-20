@@ -6,6 +6,20 @@ import React, { useState, useEffect, Component } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Line } from "react-chartjs-2";
+import {
+  Button,
+  Modal,
+  Form,
+  Label,
+  Input,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Container,
+  Col,
+  Row,
+} from "reactstrap";
 
 let token = localStorage.getItem("token");
 
@@ -37,6 +51,7 @@ class Quote extends Component {
       fromDate: new Date("2020-03-22T14:00:00.000Z"),
       toDate: new Date("2020-03-24T14:00:00.000Z"),
       symbol: props.match.params.id,
+      name: props.match,
       data: {
         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
         datasets: [
@@ -74,7 +89,6 @@ class Quote extends Component {
   };
 
   populateChart(rowData) {
-    console.log("#####DEBUG: populateChart() ");
     var label = [];
     var closeData = [];
 
@@ -102,7 +116,6 @@ class Quote extends Component {
   }
 
   handleFromChange = (date) => {
-    console.log("from data changedd");
     this.setState({ fromDate: date });
   };
   handleToChange = (date) => {
@@ -111,7 +124,6 @@ class Quote extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log("HANDLE SUBMIT");
     fetch(
       `http://131.181.190.87:3000/stocks/authed/${this.state.symbol}?from=${this.state.fromDate}&to=${this.state.toDate}`,
       {
@@ -146,9 +158,11 @@ class Quote extends Component {
           minDate={new Date("2019-11-06T14:00:00.000Z")}
           maxDate={new Date("2020-03-24T14:00:00.000Z")}
         />
-        <form onSubmit={this.handleSubmit}>
-          <input type="submit" value="Submit" />
-        </form>
+        <Form onSubmit={this.handleSubmit}>
+          <Button color="warning" type="submit" size="sm" value="Submit">
+            Submit
+          </Button>
+        </Form>
         You are looking at the {this.state.symbol} stock
         {token != null ? (
           <AgGridReact

@@ -21,23 +21,26 @@ const imgStyle = {
   display: "flex",
 };
 
+const liColour = {
+  color: "white",
+};
+
 function NavComp(props) {
   return (
-    <Navbar>
-      <NavbarBrand href="/">
-        {/* <img src={patrick} alt="Logo" style={imgStyle} /> */}
-      </NavbarBrand>
-      {/* <Nav className="mr-auto" navbar></Nav> */}
-
+    <Navbar className>
       <ul className="nav-links">
         <Link to="/">
-          <li>Home</li>
+          <li style={liColour}>Home</li>
         </Link>
         <Link to="/stock/A">
-          <li>Quote</li>
+          <li style={liColour}>Quote</li>
         </Link>
         <div>
-          {!props.isauth ? <LoginButton /> : <LogoutButton props={props} />}
+          {!props.isauth ? (
+            <LoginButton style={liColour} />
+          ) : (
+            <LogoutButton props={props} />
+          )}
         </div>
       </ul>
     </Navbar>
@@ -45,20 +48,3 @@ function NavComp(props) {
 }
 
 export default NavComp;
-{
-  /* <nav class="navbar navbar-expand bg-base-blue text-white py-2">
-      <img src={patrick} alt="Logo" style={imgStyle} />
-      <ul className="nav-links">
-        <Link to="/">
-          <li>Home</li>
-        </Link>
-        <Link to="/stock/A">
-          <li>Quote</li>
-        </Link>
-        <div>
-          {!props.isauth ? <LoginButton /> : <LogoutButton props={props} />}
-        </div>
-      </ul>
-      <img src={moss} alt="Logo" />
-    </nav> */
-}
